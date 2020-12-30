@@ -54,7 +54,7 @@ setup(
     ],
     keywords = 'cli',
     packages = find_packages(exclude=['docs', 'tests*']),
-    install_requires = ['docopt', 'pycaprio'],
+    install_requires = ['click', 'pycaprio'],
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },

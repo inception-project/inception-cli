@@ -57,6 +57,6 @@ setup(
     packages=find_packages(exclude=["docs", "tests*"]),
     install_requires=["click", "pycaprio"],
     extras_require={"dev": ["pygments"], "test": ["coverage", "pytest", "pytest-cov", "black"],},
-    entry_points={"console_scripts": ["inception=inception.cli:main",],},
+    entry_points={"console_scripts": ["inception=inception.cli:cli",],},
     cmdclass={"test": RunTests},
 )

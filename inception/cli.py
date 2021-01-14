@@ -10,7 +10,8 @@ from inception.commands.project import import_project, delete_project, list_proj
 def cli():
     logging.basicConfig(
         # format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%d-%b-%y %H:%M:%S", level=logging.INFO
-        format = "%(message)s", level = logging.INFO
+        format="%(message)s",
+        level=logging.INFO,
     )
 
 

@@ -26,13 +26,7 @@ def make_client(url: str, user: Optional[str]) -> Pycaprio:
 @click.option("-U", "--user", help="User name")
 @click.argument("target", default=".", type=click.Path())
 def export_projects(url: str, user: Optional[str], target: Optional[str]):
-    """ Exports all projects and saves them to disk.
-
-    Args:
-        url: The URL pointing to the INCEpTION instance whose projects are exported
-        target: Directory in which to save the projects (default: current working directory)
-        user: Remote API access user
-    """
+    """Exports all projects and saves them to disk."""
 
     _log.info("Exporting all projects")
 
@@ -60,15 +54,9 @@ def export_projects(url: str, user: Optional[str], target: Optional[str]):
 @click.command(name="import")
 @click.option("-u", "--url", help="INCEpTION instance URL")
 @click.option("-U", "--user", help="User name")
-@click.argument("projects", type=click.File('rb'), nargs=-1)
+@click.argument("projects", type=click.File("rb"), nargs=-1)
 def import_project(url: str, user: Optional[str], projects: List[str]):
-    """ Imports the given projects.
-
-    Args:
-        url: The URL pointing to the INCEpTION instance into which the projects are imported
-        projects: one or more INCEpTION project ZIP files
-        user: Remote API access user
-    """
+    """Imports the given projects."""
 
     client = make_client(url, user=user)
 
@@ -82,12 +70,7 @@ def import_project(url: str, user: Optional[str], projects: List[str]):
 @click.option("-u", "--url", help="INCEpTION instance URL")
 @click.option("-U", "--user", help="User name")
 def list_projects(url: str, user: Optional[str]):
-    """ Lists the projects.
-
-    Args:
-        url: The URL pointing to the INCEpTION instance into which the projects are imported
-        user: Remote API access user
-    """
+    """Lists the projects."""
 
     client = make_client(url, user=user)
 
@@ -99,18 +82,16 @@ def list_projects(url: str, user: Optional[str]):
 @click.command(name="delete")
 @click.option("-u", "--url", help="INCEpTION instance URL")
 @click.option("-U", "--user", help="User name")
-@click.option("--regex", is_flag=True, default=False, help="Whether to interpret the project name as a regular expression")
-@click.option("--dry-run", is_flag=True, default=False, help="Log which projects would be deleted without deleting them")
+@click.option(
+    "--regex", is_flag=True, default=False, help="Whether to interpret the project name as a regular expression"
+)
+@click.option(
+    "--dry-run", is_flag=True, default=False, help="Log which projects would be deleted without deleting them"
+)
 @click.argument("projects", nargs=-1)
 def delete_project(url: str, user: Optional[str], regex: bool, dry_run: bool, projects: List[str]):
-    """ Lists the projects.
-
-    Args:
-        url: The URL pointing to the INCEpTION instance into which the projects are imported
-        user: Remote API access user
-        projects: the projects to delete
-        regex: whether to interpret the project names as regular expressions
-        dry_run: Log which projects would be deleted without deleting them
+    """
+    Lists the projects.
     """
 
     client = make_client(url, user=user)

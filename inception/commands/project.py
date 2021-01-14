@@ -2,9 +2,7 @@
 import logging
 from pathlib import Path
 from typing import Optional, List
-import re
 
-from pycaprio import Pycaprio
 from pycaprio.mappings import InceptionFormat
 
 import click

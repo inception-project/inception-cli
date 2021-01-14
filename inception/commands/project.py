@@ -9,16 +9,9 @@ from pycaprio.mappings import InceptionFormat
 
 import click
 
+from inception.utils import make_client, list_matching_projects
+
 _log = logging.getLogger("inception")
-
-
-def make_client(url: str, user: Optional[str]) -> Pycaprio:
-    if user:
-        password = click.prompt("Password", hide_input=True)
-        client = Pycaprio(url, authentication=(user, password))
-    else:
-        client = Pycaprio(url)
-    return client
 
 
 @click.command(name="export")
@@ -27,18 +20,16 @@ def make_client(url: str, user: Optional[str]) -> Pycaprio:
 @click.option(
     "--regex", is_flag=True, default=False, help="Whether to interpret the project name as a regular expression"
 )
-@click.option(
-    "--dry-run", is_flag=True, default=False, help="Log actions would be performed without performing them"
-)
+@click.option("--dry-run", is_flag=True, default=False, help="Log actions would be performed without performing them")
 @click.option("-o", "--out", default=".", type=click.Path())
 @click.argument("projects", nargs=-1)
-def export_projects(url: str, user: Optional[str],  regex: bool, dry_run: bool, out: Optional[str], projects: List[str]):
+def export_projects(url: str, user: Optional[str], regex: bool, dry_run: bool, out: Optional[str], projects: List[str]):
     """Exports projects and saves them to disk."""
 
     client = make_client(url, user=user)
 
     if regex:
-        projects = get_matching_projects(client, projects)
+        projects = list_matching_projects(client, projects)
 
     target_folder = Path(out)
     target_folder.mkdir(parents=True, exist_ok=True)
@@ -87,9 +78,7 @@ def list_projects(url: str, user: Optional[str]):
 @click.option(
     "--regex", is_flag=True, default=False, help="Whether to interpret the project name as a regular expression"
 )
-@click.option(
-    "--dry-run", is_flag=True, default=False, help="Log actions would be performed without performing them"
-)
+@click.option("--dry-run", is_flag=True, default=False, help="Log actions would be performed without performing them")
 @click.argument("projects", nargs=-1)
 def delete_project(url: str, user: Optional[str], regex: bool, dry_run: bool, projects: List[str]):
     """
@@ -99,24 +88,9 @@ def delete_project(url: str, user: Optional[str], regex: bool, dry_run: bool, pr
     client = make_client(url, user=user)
 
     if regex:
-        projects = get_matching_projects(client, projects)
+        projects = list_matching_projects(client, projects)
 
     for project in projects:
         _log.info("Deleting [%s]", project.project_name)
         if not dry_run:
             client.api.delete_project(project)
-
-
-def get_matching_projects(client: Pycaprio, patterns: List[str]) -> List[str]:
-    """
-    Scans the server for any projects matching the given patterns and returns their names.
-    """
-
-    projects = []
-    accessible_projects = client.api.projects()
-    for pattern in patterns:
-        for accessible_project in accessible_projects:
-            if re.fullmatch(pattern, accessible_project.project_name) is not None:
-                projects.append(accessible_project)
-
-    return projects

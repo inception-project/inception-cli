@@ -3,7 +3,7 @@ import logging
 import click
 
 from inception.commands import export_projects
-from inception.commands.project import import_project, delete_project, list_projects
+from inception.commands.project import import_projects, delete_project, list_projects
 
 
 @click.group(help="CLI tool for INCEpTION")
@@ -21,7 +21,7 @@ def project():
 
 
 project.add_command(export_projects)
-project.add_command(import_project)
+project.add_command(import_projects)
 project.add_command(list_projects)
 project.add_command(delete_project)
 

@@ -1,5 +1,5 @@
 inception-cli
-=========
+=============
 
 *Command line tool for INCEpTION.*
 
@@ -8,6 +8,17 @@ Purpose
 -------
 
 This project provides a command line tool for the INCEpTION text annotation platform.
+
+
+Installation
+------------
+
+So far, the INCEpTION command line tool is not available from Pypi, but you can still
+install it using pip directly from this GitHub repository using the following command:
+
+.. code:: shell
+
+    $ pip install -U git+https://github.com/inception-project/inception-cli.git
 
 
 Usage
@@ -28,3 +39,5 @@ In order to use commands that access the INCEpTION Remote API, you need to:
 Authentication can either be done via the command line argument `-u` or `--user`, then you will be prompted to
 enter the password. Alternatively, set the environment variables `INCEPTION_USERNAME` and `INCEPTION_PASSWORD`
 according to the user you have given `ROLE_REMOTE` in the console session where you invoke the CLI.
+
+

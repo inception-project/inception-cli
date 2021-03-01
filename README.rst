@@ -90,7 +90,8 @@ Options:
 
 - "-u", "--url" INCEpTION instance URL
 - "-U", "--user" User name of the previously created user, you will be prompted to enter the password
-- "--projects" Names of the zip-files which should be imported
+- "--regex" (default=False) Whether to interpret the project name as a regular expression
+- "--projects" Names / regular expression of the zip-files which should be imported
 
 
 list
@@ -142,7 +143,10 @@ Use inception-cli to easily migrate from WebAnno to INCEpTION
     - assign at least the roles ``ROLE_ADMIN``, ``ROLE_USER`` and ``ROLE_REMOTE``
     - make sure that the new user is enabled
     - click on ``Save``
-#. Import all exported projects to INCEpTION using inception-cli (replace WEBANNO_URL and WEBANNO_REMOTE_API_USERNAME with the url of your WebAnno instance and the name of the user created in step 2 and replace PATH_TO_EXPORTED_PROJECT_1 etc. with the paths to each of the zip-files created in step 3)
-     .. code:: shell
+#. Import all exported projects to INCEpTION using inception-cli
+    - go to the directory containing all exported projects
+    - make sure the folder does not contain any zip-files which are no exported WebAnno-projects
+    - import the exported projects (replace WEBANNO_URL and WEBANNO_REMOTE_API_USERNAME with the url of your WebAnno instance and the name of the user created in step 2):
+         .. code:: shell
 
-            $ python inception project export -u INCEPTION_URL -U INCEPTION_REMOTE_API_USERNAME PATH_TO_EXPORTED_PROJECT_1, PATH_TO_EXPORTED_PROJECT_2, PATH_TO_EXPORTED_PROJECT_3
+                $ python inception project export -u INCEPTION_URL -U INCEPTION_REMOTE_API_USERNAME --regex *.zip

@@ -7,7 +7,7 @@ from pycaprio.mappings import InceptionFormat
 
 import click
 
-from inception.utils import make_client, list_matching_projects, list_matching_zip_files
+from inception.utils import make_client, list_matching_projects, get_project_from_name, list_matching_zip_files
 
 
 class FileIfNotRegex(click.ParamType):
@@ -38,6 +38,8 @@ def export_projects(url: str, user: Optional[str], regex: bool, dry_run: bool, o
 
     if regex:
         projects = list_matching_projects(client, projects)
+    else:
+        projects = get_project_from_name(client, projects[0])
 
     target_folder = Path(out)
     target_folder.mkdir(parents=True, exist_ok=True)
@@ -107,6 +109,8 @@ def delete_project(url: str, user: Optional[str], regex: bool, dry_run: bool, pr
 
     if regex:
         projects = list_matching_projects(client, projects)
+    else:
+        projects = get_project_from_name(client, projects[0])
 
     for project in projects:
         _log.info("Deleting [%s]", project.project_name)

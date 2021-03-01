@@ -31,6 +31,20 @@ def list_matching_projects(client: Pycaprio, patterns: List[str]) -> List[str]:
     return projects
 
 
+def get_project_from_name(client: Pycaprio, name: str) -> List[str]:
+    """
+    Scans the server for any projects matching the given name and returns the corresponding project.
+    """
+
+    projects = []
+    accessible_projects = client.api.projects()
+    for accessible_project in accessible_projects:
+        if name == accessible_project.project_name:
+            projects.append(accessible_project)
+
+    return projects
+
+
 def list_matching_zip_files(patterns: List[str]) -> List[str]:
     """
         Scans the filesystem for any projects matching the given patterns and returns their names.

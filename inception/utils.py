@@ -1,3 +1,4 @@
+import glob
 import re
 from typing import Optional, List
 
@@ -41,4 +42,16 @@ def get_project_from_name(client: Pycaprio, name: str) -> List[str]:
         if name == accessible_project.project_name:
             projects.append(accessible_project)
 
+    return projects
+
+
+def list_matching_zip_files(patterns: List[str]) -> List[str]:
+    """
+        Scans the filesystem for any projects matching the given patterns and returns their names.
+    """
+    projects = []
+    for pattern in patterns:
+        projects += glob.glob(pattern)
+
+    projects = [filepath for filepath in projects if filepath.endswith(".zip")]
     return projects

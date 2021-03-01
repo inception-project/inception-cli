@@ -7,7 +7,17 @@ from pycaprio.mappings import InceptionFormat
 
 import click
 
-from inception.utils import make_client, list_matching_projects, get_project_from_name
+from inception.utils import make_client, list_matching_projects, get_project_from_name, list_matching_zip_files
+
+
+class FileIfNotRegex(click.ParamType):
+
+    def convert(self, value, param, ctx):
+        if ctx.params["regex"]:
+            return click.STRING.convert(value, param, ctx)
+        else:
+            return click.File("rb")
+
 
 _log = logging.getLogger("inception")
 
@@ -47,15 +57,25 @@ def export_projects(url: str, user: Optional[str], regex: bool, dry_run: bool, o
 @click.command(name="import")
 @click.option("-u", "--url", help="INCEpTION instance URL")
 @click.option("-U", "--user", help="User name")
-@click.argument("projects", type=click.File("rb"), nargs=-1)
-def import_projects(url: str, user: Optional[str], projects: List[str]):
+@click.option(
+    "--regex", is_flag=True, default=False, help="Whether to interpret the project name as a regular expression"
+)
+@click.argument("projects", type=FileIfNotRegex(), nargs=-1)
+def import_projects(url: str, user: Optional[str], regex: bool, projects: List[str]):
     """Imports the given projects."""
 
     client = make_client(url, user=user)
 
+    if regex:
+        projects = list_matching_zip_files(projects)
+
     for project in projects:
-        _log.info("Importing project [%s] ...", project.name)
-        imported_project = client.api.import_project(project)
+        _log.info("Importing project [%s] ...", project if regex else project.name)
+        if regex:
+            with open(project, "rb") as project_file:
+                imported_project = client.api.import_project(project_file)
+        else:
+            imported_project = client.api.import_project(project)
         _log.info("Imported project as [%s]", imported_project.project_name)
 
 
@@ -82,7 +102,7 @@ def list_projects(url: str, user: Optional[str]):
 @click.argument("projects", nargs=-1)
 def delete_project(url: str, user: Optional[str], regex: bool, dry_run: bool, projects: List[str]):
     """
-    Lists the projects.
+    Deletes the given projects.
     """
 
     client = make_client(url, user=user)

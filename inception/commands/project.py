@@ -82,7 +82,7 @@ def list_projects(url: str, user: Optional[str]):
 @click.argument("projects", nargs=-1)
 def delete_project(url: str, user: Optional[str], regex: bool, dry_run: bool, projects: List[str]):
     """
-    Lists the projects.
+    Deletes the given projects.
     """
 
     client = make_client(url, user=user)
